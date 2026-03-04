@@ -84,26 +84,6 @@ const InvoiceDetails = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow p-6">
         {/* Header */}
-        {/* <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">
-              Invoice #{invoice.invoiceNumber}
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Customer: {invoice.customerName}
-            </p>
-          </div>
-
-          <span
-            className={`px-4 py-1 rounded-full text-sm font-medium ${
-              status === "PAID"
-                ? "bg-green-100 text-green-600"
-                : "bg-yellow-100 text-yellow-600"
-            }`}
-          >
-            {status}
-          </span>
-        </div> */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold">
