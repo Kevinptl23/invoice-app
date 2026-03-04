@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import InvoiceActions from "../pages/InvoiceActions.jsx";
 
 const InvoiceDetails = () => {
   const { id } = useParams();
@@ -15,9 +16,7 @@ const InvoiceDetails = () => {
 
   const fetchInvoice = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/invoices/${id}`
-      );
+      const res = await axios.get(`http://localhost:8080/api/invoices/${id}`);
       setInvoiceData(res.data);
     } catch (error) {
       console.log(error);
@@ -48,19 +47,16 @@ const InvoiceDetails = () => {
     try {
       setSubmitting(true);
 
-      await axios.post(
-        `http://localhost:8080/api/invoices/payments/${id}`,
-        { amount }
-      );
+      await axios.post(`http://localhost:8080/api/invoices/payments/${id}`, {
+        amount,
+      });
 
       setShowModal(false);
       setPaymentAmount("");
       fetchInvoice();
     } catch (error) {
       console.log(error);
-      setErrorMessage(
-        error.response?.data?.message || "Server error"
-      );
+      setErrorMessage(error.response?.data?.message || "Server error");
     } finally {
       setSubmitting(false);
     }
@@ -87,9 +83,8 @@ const InvoiceDetails = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow p-6">
-        
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        {/* <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold">
               Invoice #{invoice.invoiceNumber}
@@ -108,6 +103,32 @@ const InvoiceDetails = () => {
           >
             {status}
           </span>
+        </div> */}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">
+              Invoice #{invoice.invoiceNumber}
+            </h1>
+            <p className="text-gray-500">Customer: {invoice.customerName}</p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span
+              className={`px-4 py-1 rounded-full text-sm font-medium ${
+                status === "PAID"
+                  ? "bg-green-100 text-green-600"
+                  : "bg-yellow-100 text-yellow-600"
+              }`}
+            >
+              {status}
+            </span>
+
+            <InvoiceActions
+              invoiceId={invoice._id}
+              isArchived={invoice.isArchived}
+              onRefresh={fetchInvoice}
+            />
+          </div>
         </div>
 
         {/* Dates */}
@@ -135,9 +156,7 @@ const InvoiceDetails = () => {
                   <td className="p-3">{item.description}</td>
                   <td className="p-3">{item.quantity}</td>
                   <td className="p-3">₹ {item.unitPrice}</td>
-                  <td className="p-3 font-medium">
-                    ₹ {item.lineTotal}
-                  </td>
+                  <td className="p-3 font-medium">₹ {item.lineTotal}</td>
                 </tr>
               ))}
             </tbody>
@@ -178,9 +197,7 @@ const InvoiceDetails = () => {
           </div>
 
           {payments.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              No payments yet.
-            </p>
+            <p className="text-sm text-gray-500">No payments yet.</p>
           ) : (
             <ul className="space-y-2">
               {payments.map((payment) => (
@@ -188,9 +205,7 @@ const InvoiceDetails = () => {
                   key={payment._id}
                   className="flex justify-between border p-3 rounded text-sm"
                 >
-                  <span>
-                    {new Date(payment.paymentDate).toDateString()}
-                  </span>
+                  <span>{new Date(payment.paymentDate).toDateString()}</span>
                   <span>₹ {payment.amount}</span>
                 </li>
               ))}
@@ -203,9 +218,7 @@ const InvoiceDetails = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
           <div className="bg-white w-96 p-6 rounded-xl shadow-lg">
-            <h3 className="text-lg font-semibold mb-4">
-              Add Payment
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">Add Payment</h3>
 
             <input
               type="number"
@@ -216,9 +229,7 @@ const InvoiceDetails = () => {
             />
 
             {errorMessage && (
-              <p className="text-red-500 text-sm mb-3">
-                {errorMessage}
-              </p>
+              <p className="text-red-500 text-sm mb-3">{errorMessage}</p>
             )}
 
             <div className="flex justify-end gap-2">
