@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.get("/:id", getInvoiceDetails);
-router.post("/:id/payments", addPayment);
+router.post("/payments/:id", addPayment);
 router.post("/archive", archiveInvoice);
 router.post("/restore", restoreInvoice);
 
